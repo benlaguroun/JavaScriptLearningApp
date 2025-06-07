@@ -1849,55 +1849,757 @@ export default function JavaScriptLearningApp() {
     {
       title: "Level 37: Progressive Web Apps (PWA)",
       description:
-        "Learn how to build fast, reliable, and engaging web apps that work offline and feel like native apps.",
+        "Learn how to build web apps that work offline, load fast, and feel like native apps using PWA technologies.",
       lessons: [
         {
           title: "What is a PWA?",
           content:
-            "A Progressive Web App is a web application that uses modern web capabilities to deliver an app-like experience to users.",
-          code: "// PWAs work offline, load fast, and can be installed on devices",
+            "A Progressive Web App combines the best of web and mobile apps. PWAs are reliable, fast, and installable.",
+          code: "// Key features: offline support, responsive design, installability",
         },
         {
-          title: "Key Features of PWAs",
+          title: "Manifest File",
           content:
-            "PWAs are reliable, fast, and engaging thanks to service workers, caching, and web app manifests.",
-          code: "// Service Workers enable offline support\n// Web App Manifest allows installation",
+            "The `manifest.json` defines your app's name, icon, start URL, and more, enabling installation on home screens.",
+          code: `{\n  "name": "My PWA App",\n  "short_name": "PWA",\n  "start_url": "/",\n  "display": "standalone",\n  "background_color": "#ffffff",\n  "icons": [\n    {\n      "src": "/icon-192.png",\n      "sizes": "192x192",\n      "type": "image/png"\n    }\n  ]\n}`,
         },
         {
-          title: "Creating a Web App Manifest",
+          title: "Service Workers",
           content:
-            "The manifest.json file defines your app’s name, icons, theme, and how it should behave when installed.",
-          code: '{\n  "name": "My PWA",\n  "short_name": "PWA",\n  "start_url": ".",\n  "display": "standalone",\n  "background_color": "#ffffff",\n  "theme_color": "#317EFB",\n  "icons": [\n    {\n      "src": "icon-192.png",\n      "sizes": "192x192",\n      "type": "image/png"\n    },\n    {\n      "src": "icon-512.png",\n      "sizes": "512x512",\n      "type": "image/png"\n    }\n  ]\n}',
+            "Service workers are scripts that run in the background and enable offline caching, background sync, and push notifications.",
+          code: "self.addEventListener('install', (event) => {\n  event.waitUntil(\n    caches.open('v1').then((cache) => {\n      return cache.addAll(['/index.html', '/style.css', '/app.js']);\n    })\n  );\n});\n\nself.addEventListener('fetch', (event) => {\n  event.respondWith(\n    caches.match(event.request).then((response) => {\n      return response || fetch(event.request);\n    })\n  );\n});",
         },
         {
-          title: "Registering a Service Worker",
+          title: "Registering the Service Worker",
           content:
-            "Service workers run in the background, intercept network requests, and cache resources for offline use.",
-          code: "if ('serviceWorker' in navigator) {\n  window.addEventListener('load', () => {\n    navigator.serviceWorker.register('/service-worker.js')\n      .then(registration => {\n        console.log('ServiceWorker registered:', registration);\n      })\n      .catch(error => {\n        console.error('ServiceWorker registration failed:', error);\n      });\n  });\n}",
+            "The main JavaScript file must register the service worker to enable offline capabilities.",
+          code: "if ('serviceWorker' in navigator) {\n  window.addEventListener('load', () => {\n    navigator.serviceWorker.register('/service-worker.js')\n      .then(() => console.log('Service Worker registered'))\n      .catch((err) => console.error('Service Worker failed', err));\n  });\n}",
         },
         {
-          title: "Basic Service Worker Script",
+          title: "Making Your App Installable",
           content:
-            "A simple service worker caches essential files during installation and serves cached content when offline.",
-          code: "const CACHE_NAME = 'pwa-cache-v1';\nconst urlsToCache = [\n  '/',\n  '/index.html',\n  '/styles.css',\n  '/script.js'\n];\n\nself.addEventListener('install', event => {\n  event.waitUntil(\n    caches.open(CACHE_NAME)\n      .then(cache => cache.addAll(urlsToCache))\n  );\n});\n\nself.addEventListener('fetch', event => {\n  event.respondWith(\n    caches.match(event.request)\n      .then(response => response || fetch(event.request))\n  );\n});",
+            "With a valid manifest and registered service worker, the browser will show an install prompt on supported platforms.",
+          code: "// No specific code; browser handles the prompt automatically",
         },
         {
           title: "Testing Your PWA",
           content:
-            "Use Chrome DevTools Application panel to audit your PWA and check offline functionality.",
-          code: "// Run Lighthouse audits for PWA compliance",
+            "Use Chrome DevTools > Lighthouse to test your PWA for offline readiness, performance, and installability.",
+          code: "// Lighthouse audit → PWA category",
         },
         {
-          title: "Deploying PWAs",
+          title: "Real-World PWA Examples",
           content:
-            "Host your PWA on HTTPS-enabled servers for security and installability.",
-          code: "// Use platforms like Netlify, Vercel, or your own HTTPS server",
+            "Examples: Twitter Lite, Starbucks, Pinterest — these apps are fast, reliable, and work offline.",
+          code: "// Try visiting them and using dev tools to explore caching behavior",
+        },
+      ],
+    },
+    {
+      title: "Level 38: Building APIs with JavaScript (Node.js + Express)",
+      description:
+        "Learn how to create RESTful APIs using Node.js and Express, the most popular JavaScript backend framework.",
+      lessons: [
+        {
+          title: "What is Node.js?",
+          content:
+            "Node.js is a runtime that lets you run JavaScript on the server. It’s fast, event-driven, and great for APIs.",
+          code: "// Run JavaScript in terminal:\nconsole.log('Hello from Node.js!');",
         },
         {
-          title: "Next Steps",
+          title: "What is Express?",
           content:
-            "Explore advanced features like push notifications, background sync, and app shortcuts.",
-          code: "// Use Push API and Background Sync API",
+            "Express is a minimal and flexible Node.js framework used to build web servers and APIs quickly.",
+          code: "// Install it using npm:\nnpm install express",
+        },
+        {
+          title: "Creating Your First Express Server",
+          content:
+            "You can create a simple API that listens to HTTP requests on a specific port.",
+          code: "const express = require('express');\nconst app = express();\nconst PORT = 3000;\n\napp.get('/', (req, res) => {\n  res.send('Welcome to my API!');\n});\n\napp.listen(PORT, () => {\n  console.log(`Server is running on http://localhost:${PORT}`);\n});",
+        },
+        {
+          title: "Handling GET and POST Requests",
+          content:
+            "Create routes that respond to different types of HTTP requests like GET and POST.",
+          code: "app.use(express.json()); // To parse JSON bodies\n\napp.get('/users', (req, res) => {\n  res.json([{ id: 1, name: 'Alice' }]);\n});\n\napp.post('/users', (req, res) => {\n  const user = req.body;\n  res.status(201).json({ message: 'User created', user });\n});",
+        },
+        {
+          title: "Route Parameters and Query Strings",
+          content:
+            "Use route parameters and query strings to handle dynamic requests.",
+          code: "app.get('/users/:id', (req, res) => {\n  const userId = req.params.id;\n  res.json({ id: userId, name: 'User ' + userId });\n});",
+        },
+        {
+          title: "Connecting to a Database (Intro)",
+          content:
+            "You can use databases like MongoDB or PostgreSQL with Node.js to store data. Here’s a conceptual intro.",
+          code: "// Example using MongoDB + Mongoose:\n// const mongoose = require('mongoose');\n// mongoose.connect('mongodb://localhost:27017/mydb');",
+        },
+        {
+          title: "Using Middleware",
+          content:
+            "Middleware functions can log, authenticate, or modify requests before they reach routes.",
+          code: "app.use((req, res, next) => {\n  console.log(`${req.method} ${req.url}`);\n  next(); // Move to the next middleware or route\n});",
+        },
+        {
+          title: "Building a Simple REST API",
+          content:
+            "Put it all together: create, read, update, and delete (CRUD) operations for managing resources.",
+          code: "// Use methods: GET, POST, PUT, DELETE to build full REST functionality\n// Example routes:\n// GET /posts, POST /posts, PUT /posts/:id, DELETE /posts/:id",
+        },
+      ],
+    },
+    {
+      title: "Level 39: WebSockets & Real-Time Apps",
+      description:
+        "Learn how to build real-time applications using WebSockets — for chat apps, live updates, and more.",
+      lessons: [
+        {
+          title: "What are WebSockets?",
+          content:
+            "WebSockets allow real-time, two-way communication between the browser and the server over a single, long-lived connection.",
+          code: "// Unlike HTTP, WebSockets stay open and don't require repeated requests.",
+        },
+        {
+          title: "When to Use WebSockets",
+          content:
+            "Use WebSockets when you need instant updates — like chat apps, live feeds, games, or collaboration tools.",
+          code: "// Example: instant message notifications in a chat app",
+        },
+        {
+          title: "Setting Up a WebSocket Server (Node.js + ws)",
+          content: "`ws` is a lightweight WebSocket library for Node.js.",
+          code: "const WebSocket = require('ws');\nconst server = new WebSocket.Server({ port: 3000 });\n\nserver.on('connection', (socket) => {\n  console.log('Client connected');\n  socket.on('message', (message) => {\n    console.log('Received:', message);\n    socket.send('You said: ' + message);\n  });\n});",
+        },
+        {
+          title: "Creating a WebSocket Client (Browser)",
+          content:
+            "Browsers have built-in WebSocket support. You can connect to a WebSocket server like this:",
+          code: "const socket = new WebSocket('ws://localhost:3000');\n\nsocket.onopen = () => {\n  console.log('Connected to server');\n  socket.send('Hello from the browser!');\n};\n\nsocket.onmessage = (event) => {\n  console.log('Server says:', event.data);\n};",
+        },
+        {
+          title: "Broadcasting Messages to All Clients",
+          content:
+            "You can send messages to every connected client by looping through them.",
+          code: "server.on('connection', (socket) => {\n  socket.on('message', (message) => {\n    server.clients.forEach((client) => {\n      if (client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n});",
+        },
+        {
+          title: "Real-Time Chat Example",
+          content:
+            "Using WebSockets, you can build a chat app where users send and receive messages instantly.",
+          code: "// Server handles messages and broadcasts them to all connected clients.\n// Client sends input and listens for messages to update the UI in real-time.",
+        },
+        {
+          title: "WebSocket vs REST API",
+          content:
+            "Use REST APIs for CRUD operations and WebSockets for live updates. They can work together in a full-stack app.",
+          code: "// WebSocket: push updates → chat, notifications\n// REST API: fetch initial data → GET /messages",
+        },
+      ],
+    },
+    {
+      title: "Level 40: JavaScript Security Essentials",
+      description:
+        "Learn how to secure your JavaScript applications against common web vulnerabilities and attacks.",
+      lessons: [
+        {
+          title: "Why Security Matters",
+          content:
+            "Security protects your users’ data, prevents unauthorized access, and builds trust. JavaScript apps—especially those running in the browser—are prime targets for attackers.",
+          code: "// Always validate, sanitize, and be cautious with user input.",
+        },
+        {
+          title: "Cross-Site Scripting (XSS)",
+          content:
+            "XSS occurs when attackers inject malicious scripts into your web page. Prevent it by escaping output and avoiding unsafe HTML insertion.",
+          code: "// ❌ Unsafe:\ndocument.body.innerHTML = userInput;\n\n// ✅ Safe:\nconst div = document.createElement('div');\ndiv.textContent = userInput;\ndocument.body.appendChild(div);",
+        },
+        {
+          title: "Cross-Site Request Forgery (CSRF)",
+          content:
+            "CSRF tricks users into submitting unwanted requests. Prevent it with CSRF tokens, same-site cookies, or headers.",
+          code: "// Use CSRF protection middleware on server (like csurf in Express).",
+        },
+        {
+          title: "Avoiding eval() and new Function()",
+          content:
+            "`eval()` executes a string as code — it's dangerous and should almost never be used.",
+          code: "// ❌ Avoid:\neval('alert(\"Hello\")');\n\n// ✅ Do this instead:\nconst message = 'Hello';\nalert(message);",
+        },
+        {
+          title: "Secure Data Storage",
+          content:
+            "Never store sensitive data like tokens or passwords in `localStorage` or `sessionStorage` — they're accessible via JavaScript.",
+          code: "// Prefer HTTP-only cookies for auth tokens.",
+        },
+        {
+          title: "Content Security Policy (CSP)",
+          content:
+            "CSP is a browser feature that blocks unsafe script execution. Use it to reduce XSS risk.",
+          code: "// Example CSP header:\n// Content-Security-Policy: default-src 'self'; script-src 'self'",
+        },
+        {
+          title: "HTTPS and Secure Headers",
+          content:
+            "Always use HTTPS. Add secure headers like `Strict-Transport-Security`, `X-Content-Type-Options`, and `X-Frame-Options`.",
+          code: "// Use libraries like helmet.js in Express apps to auto-add security headers.",
+        },
+        {
+          title: "Input Validation and Sanitization",
+          content:
+            "Always validate inputs on the client and server. Use strong validation rules and libraries like Joi or Zod.",
+          code: "// Example:\nconst name = req.body.name;\nif (typeof name !== 'string' || name.length > 50) {\n  return res.status(400).send('Invalid name');\n}",
+        },
+      ],
+    },
+    {
+      title: "Level 41: TypeScript for JavaScript Developers",
+      description:
+        "Learn how to use TypeScript to write type-safe, scalable, and reliable JavaScript code.",
+      lessons: [
+        {
+          title: "What is TypeScript?",
+          content:
+            "TypeScript is a superset of JavaScript that adds static types. It helps catch errors at compile time and improves code quality.",
+          code: "// JavaScript:\nlet message = 'Hello';\n\n// TypeScript:\nlet message: string = 'Hello';",
+        },
+        {
+          title: "Setting Up TypeScript",
+          content:
+            "You can install TypeScript globally and compile `.ts` files into JavaScript.",
+          code: "// Install TypeScript:\nnpm install -g typescript\n\n// Create a file:\n// hello.ts\n\n// Compile:\ntsc hello.ts",
+        },
+        {
+          title: "Basic Types",
+          content:
+            "TypeScript has types like `string`, `number`, `boolean`, `array`, `object`, and `any`.",
+          code: "let age: number = 25;\nlet isOnline: boolean = true;\nlet names: string[] = ['Alice', 'Bob'];",
+        },
+        {
+          title: "Functions with Types",
+          content:
+            "You can define types for function parameters and return values.",
+          code: "function greet(name: string): string {\n  return `Hello, ${name}`;\n}",
+        },
+        {
+          title: "Interfaces and Type Aliases",
+          content:
+            "Interfaces define object structures. Type aliases are similar but more flexible.",
+          code: "interface User {\n  id: number;\n  name: string;\n}\n\nconst user: User = { id: 1, name: 'Alice' };",
+        },
+        {
+          title: "Optional and Default Parameters",
+          content:
+            "You can mark parameters as optional or provide default values.",
+          code: "function log(message: string, user?: string) {\n  console.log(user ? `${user}: ${message}` : message);\n}",
+        },
+        {
+          title: "Type Inference",
+          content:
+            "TypeScript can often infer types from context, reducing the need for explicit annotations.",
+          code: "let score = 100; // inferred as number\nconst name = 'John'; // inferred as string",
+        },
+        {
+          title: "Benefits of TypeScript",
+          content:
+            "TypeScript helps you avoid bugs, provides better autocompletion, and makes your code easier to refactor and scale.",
+          code: "// Try writing code in a TypeScript-aware editor like VS Code for best experience.",
+        },
+      ],
+    },
+    {
+      title: "Level 42: Unit Testing with JavaScript",
+      description:
+        "Learn how to write tests for your JavaScript code using testing frameworks like Jest or Mocha.",
+      lessons: [
+        {
+          title: "What is Unit Testing?",
+          content:
+            "Unit testing is the practice of testing individual pieces (units) of code—like functions—to ensure they behave as expected.",
+          code: "// Example: testing if a function adds two numbers correctly",
+        },
+        {
+          title: "Why Test Your Code?",
+          content:
+            "Tests help you catch bugs early, avoid regressions, and make refactoring safer. They're a key part of professional development.",
+          code: "// Test-driven development (TDD) is a popular approach where you write tests before code.",
+        },
+        {
+          title: "Setting Up Jest",
+          content:
+            "Jest is a popular testing framework for JavaScript. Easy to use and works out-of-the-box for most projects.",
+          code: '// Install:\nnpm install --save-dev jest\n\n// Add script to package.json:\n"test": "jest"',
+        },
+        {
+          title: "Writing Your First Test",
+          content:
+            "Create a `sum.js` file with a simple function, and write a test for it using Jest.",
+          code: "// sum.js\nfunction sum(a, b) {\n  return a + b;\n}\nmodule.exports = sum;\n\n// sum.test.js\nconst sum = require('./sum');\ntest('adds 1 + 2 to equal 3', () => {\n  expect(sum(1, 2)).toBe(3);\n});",
+        },
+        {
+          title: "Matchers and Assertions",
+          content:
+            "Jest provides functions like `toBe`, `toEqual`, `toBeTruthy`, etc. to make assertions in tests.",
+          code: "expect(true).toBe(true);\nexpect([1, 2]).toEqual([1, 2]);\nexpect(undefined).toBeUndefined();",
+        },
+        {
+          title: "Grouping Tests with describe()",
+          content:
+            "`describe()` helps you organize related tests under a common label.",
+          code: "describe('math functions', () => {\n  test('adds numbers', () => {\n    expect(sum(2, 3)).toBe(5);\n  });\n});",
+        },
+        {
+          title: "Mocking Functions",
+          content:
+            "You can mock dependencies or APIs to isolate the unit you’re testing.",
+          code: "const fetchData = jest.fn(() => 'mocked data');\nexpect(fetchData()).toBe('mocked data');",
+        },
+        {
+          title: "Running and Watching Tests",
+          content:
+            "Use `npm test` or `npx jest` to run your tests. Add `--watch` to rerun on file changes.",
+          code: "// Run all tests:\nnpx jest\n\n// Watch mode:\nnpx jest --watch",
+        },
+      ],
+    },
+    {
+      title: "Level 43: Debugging JavaScript Like a Pro",
+      description:
+        "Learn how to identify and fix bugs using browser dev tools, breakpoints, and debugging strategies.",
+      lessons: [
+        {
+          title: "Why Debugging Matters",
+          content:
+            "Debugging helps you understand how your code behaves and where things go wrong. Efficient debugging saves time and reduces frustration.",
+          code: "// If it doesn’t work, debug it step by step instead of guessing.",
+        },
+        {
+          title: "Using console.log() (and Why It's Limited)",
+          content:
+            "`console.log()` is a common way to inspect variables or check if code runs, but it can clutter your output and miss deeper issues.",
+          code: "console.log('value:', someVar);\nconsole.error('Something went wrong');",
+        },
+        {
+          title: "Browser DevTools",
+          content:
+            "Every modern browser has developer tools. Open them with F12 or right-click > Inspect.",
+          code: "// Use the Console tab to run JavaScript and inspect outputs\n// Use the Sources tab to set breakpoints and step through code",
+        },
+        {
+          title: "Setting Breakpoints",
+          content:
+            "Breakpoints let you pause execution at specific lines and examine the program’s state.",
+          code: "// In DevTools > Sources tab, click the line number to set a breakpoint\n// Then reload or trigger the code to pause there",
+        },
+        {
+          title: "Step In, Out, Over",
+          content:
+            "Once paused, use controls to:\n- Step Over: run the next line\n- Step Into: enter a function call\n- Step Out: finish current function and return",
+          code: "// Use these to follow code flow and find logic errors.",
+        },
+        {
+          title: "Watch Variables and Call Stack",
+          content:
+            "DevTools shows a live view of variable values and the function call stack while paused.",
+          code: "// Useful to trace how your program reached a certain state",
+        },
+        {
+          title: "Using debugger Keyword",
+          content:
+            "You can place `debugger;` in your code to create a manual breakpoint when DevTools is open.",
+          code: "function calculateTotal(price, tax) {\n  debugger;\n  return price + tax;\n}",
+        },
+        {
+          title: "Debugging Tips",
+          content:
+            "- Reproduce the bug consistently\n- Narrow down the problem area\n- Use breakpoints or `debugger` instead of adding many `console.log`\n- Keep your debugging environment organized",
+          code: "// Debug smart, not hard 💡",
+        },
+      ],
+    },
+    {
+      title: "Level 44: Progressive Web Apps (PWAs)",
+      description:
+        "Make your web apps installable, offline-capable, and fast with Progressive Web App technologies.",
+      lessons: [
+        {
+          title: "What is a PWA?",
+          content:
+            "A Progressive Web App is a web application that behaves like a native app. It can work offline, send notifications, and be installed on users’ devices.",
+          code: "// PWAs combine the best of web and mobile experiences.",
+        },
+        {
+          title: "Core Features of a PWA",
+          content:
+            "- Responsive design\n- Offline support (via service workers)\n- Installable (with a manifest)\n- HTTPS-secured\n- Fast loading and reliable",
+          code: "// You build a PWA with HTML, CSS, JS + manifest + service worker.",
+        },
+        {
+          title: "Creating a Web App Manifest",
+          content:
+            "The manifest.json file tells the browser how to treat your app when it's installed.",
+          code: `{\n  "name": "My PWA App",\n  "short_name": "PWA",\n  "start_url": "/",\n  "display": "standalone",\n  "background_color": "#ffffff",\n  "icons": [\n    {\n      "src": "/icon.png",\n      "sizes": "192x192",\n      "type": "image/png"\n    }\n  ]\n}`,
+        },
+        {
+          title: "Registering a Service Worker",
+          content:
+            "A service worker is a background script that enables offline support, caching, and push notifications.",
+          code: "if ('serviceWorker' in navigator) {\n  window.addEventListener('load', () => {\n    navigator.serviceWorker.register('/sw.js')\n      .then(reg => console.log('SW registered'))\n      .catch(err => console.error('SW registration failed:', err));\n  });\n}",
+        },
+        {
+          title: "Basic Service Worker Example",
+          content:
+            "A basic service worker listens for `install` and `fetch` events to cache files and serve them offline.",
+          code: "self.addEventListener('install', (e) => {\n  e.waitUntil(\n    caches.open('pwa-cache').then(cache => {\n      return cache.addAll(['/index.html', '/style.css', '/script.js']);\n    })\n  );\n});\n\nself.addEventListener('fetch', (e) => {\n  e.respondWith(\n    caches.match(e.request).then(response => response || fetch(e.request))\n  );\n});",
+        },
+        {
+          title: "Making Your App Installable",
+          content:
+            "With a manifest and service worker in place, browsers like Chrome allow users to install your app from the browser.",
+          code: "// The install prompt is handled automatically or via a `beforeinstallprompt` event.",
+        },
+        {
+          title: "Testing Your PWA",
+          content:
+            "Use Chrome DevTools → Lighthouse to test PWA features and see what improvements are needed.",
+          code: "// DevTools > Lighthouse > Generate report > PWA category",
+        },
+        {
+          title: "PWA Use Cases",
+          content:
+            "PWAs are perfect for apps where performance, offline access, and mobile experience matter: note apps, to-do lists, e-commerce, news, etc.",
+          code: "// PWAs are used by Twitter, Pinterest, Starbucks, and more.",
+        },
+      ],
+    },
+    {
+      title: "Level 45: Building with Node.js and Express",
+      description:
+        "Learn how to build a backend server using Node.js and Express to handle HTTP requests and serve APIs.",
+      lessons: [
+        {
+          title: "What is Node.js?",
+          content:
+            "Node.js is a JavaScript runtime that allows you to run JavaScript outside the browser — on the server.",
+          code: "// Run a simple script with Node.js:\nconsole.log('Hello from Node!');",
+        },
+        {
+          title: "What is Express?",
+          content:
+            "Express is a minimalist web framework for Node.js. It helps you handle HTTP requests, routes, middleware, and responses.",
+          code: "// Express makes it easy to build REST APIs and web servers.",
+        },
+        {
+          title: "Setting Up a Node + Express Project",
+          content: "Create a new project and install Express using npm.",
+          code: "mkdir my-api && cd my-api\nnpm init -y\nnpm install express",
+        },
+        {
+          title: "Your First Express Server",
+          content:
+            "Write a basic Express server that responds to requests on port 3000.",
+          code: "const express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.send('Hello from Express!');\n});\n\napp.listen(3000, () => console.log('Server running on port 3000'));",
+        },
+        {
+          title: "Handling Different Routes",
+          content: "Define multiple routes to respond to different URLs.",
+          code: "app.get('/about', (req, res) => res.send('About Page'));\napp.get('/contact', (req, res) => res.send('Contact Page'));",
+        },
+        {
+          title: "Handling POST Requests",
+          content: "Use middleware to parse JSON and handle form submissions.",
+          code: "app.use(express.json());\n\napp.post('/submit', (req, res) => {\n  const data = req.body;\n  res.send(`Received: ${JSON.stringify(data)}`);\n});",
+        },
+        {
+          title: "Sending JSON Responses",
+          content: "Express can send JSON, which is useful for APIs.",
+          code: "app.get('/api/user', (req, res) => {\n  res.json({ id: 1, name: 'Alice' });\n});",
+        },
+        {
+          title: "Using Middleware",
+          content:
+            "Middleware functions run before your route handlers. They’re useful for logging, authentication, etc.",
+          code: "app.use((req, res, next) => {\n  console.log(`${req.method} ${req.url}`);\n  next();\n});",
+        },
+      ],
+    },
+    {
+      title: "Level 46: Connecting to a Database (MongoDB)",
+      description:
+        "Learn how to connect your Express backend to MongoDB, store data, and build real API endpoints.",
+      lessons: [
+        {
+          title: "What is MongoDB?",
+          content:
+            "MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. It's great for modern web apps.",
+          code: "// Think of MongoDB documents like JavaScript objects:\n{\n  name: 'Alice',\n  age: 25,\n  hobbies: ['reading', 'coding']\n}",
+        },
+        {
+          title: "Using Mongoose",
+          content:
+            "Mongoose is a popular library for interacting with MongoDB in Node.js. It provides schemas and easy queries.",
+          code: "npm install mongoose",
+        },
+        {
+          title: "Connecting to MongoDB",
+          content:
+            "Use Mongoose to connect your Express app to a MongoDB database (local or cloud like MongoDB Atlas).",
+          code: "const mongoose = require('mongoose');\n\nmongoose.connect('mongodb://localhost:27017/myapp', {\n  useNewUrlParser: true,\n  useUnifiedTopology: true\n})\n.then(() => console.log('MongoDB connected'))\n.catch(err => console.error(err));",
+        },
+        {
+          title: "Creating a Model",
+          content: "Define a schema and model to represent your data.",
+          code: "const UserSchema = new mongoose.Schema({\n  name: String,\n  email: String\n});\n\nconst User = mongoose.model('User', UserSchema);",
+        },
+        {
+          title: "Saving Data to MongoDB",
+          content:
+            "You can now create and save documents (records) in your database.",
+          code: "const user = new User({ name: 'Alice', email: 'alice@example.com' });\nuser.save()\n  .then(() => console.log('User saved'))\n  .catch(err => console.error(err));",
+        },
+        {
+          title: "Fetching Data",
+          content:
+            "Use `.find()` or `.findOne()` to query documents from MongoDB.",
+          code: "User.find().then(users => console.log(users));\nUser.findOne({ name: 'Alice' }).then(user => console.log(user));",
+        },
+        {
+          title: "Creating API Routes",
+          content:
+            "Connect your routes to the database so users can interact with your data via the API.",
+          code: "app.get('/users', async (req, res) => {\n  const users = await User.find();\n  res.json(users);\n});\n\napp.post('/users', async (req, res) => {\n  const newUser = new User(req.body);\n  await newUser.save();\n  res.status(201).json(newUser);\n});",
+        },
+        {
+          title: "Error Handling and Validation",
+          content:
+            "Use Mongoose’s validation features and Express’s error-handling to ensure safe, clean data.",
+          code: "const UserSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true }\n});",
+        },
+      ],
+    },
+    {
+      title: "Level 47: REST API Design Best Practices",
+      description:
+        "Learn how to design RESTful APIs that are easy to use, scalable, and maintainable.",
+      lessons: [
+        {
+          title: "What is a REST API?",
+          content:
+            "REST (Representational State Transfer) is a set of principles for designing networked APIs that use HTTP methods and URLs to operate on resources.",
+          code: "// Resources represent data entities like users, products, or posts.",
+        },
+        {
+          title: "Use Nouns for Endpoints",
+          content:
+            "Endpoints should represent resources, not actions. Use nouns, not verbs.",
+          code: "// Good: GET /users, POST /products\n// Bad: GET /getUsers, POST /createProduct",
+        },
+        {
+          title: "HTTP Methods",
+          content:
+            "Use the right HTTP methods for different operations:\n- GET to fetch data\n- POST to create data\n- PUT/PATCH to update data\n- DELETE to remove data",
+          code: "// Example:\nGET /users\nPOST /users\nPUT /users/:id\nDELETE /users/:id",
+        },
+        {
+          title: "Use Proper Status Codes",
+          content:
+            "Send appropriate HTTP status codes to indicate the result of an API request.",
+          code: "// 200 OK, 201 Created, 400 Bad Request, 404 Not Found, 500 Internal Server Error",
+        },
+        {
+          title: "Use Consistent Naming",
+          content: "Keep your endpoint naming consistent and predictable.",
+          code: "// Plural nouns: /users, /orders\n// Nested resources: /users/:userId/orders",
+        },
+        {
+          title: "Handle Errors Gracefully",
+          content:
+            "Return clear error messages and status codes to help clients understand what went wrong.",
+          code: `res.status(404).json({ error: 'User not found' });`,
+        },
+        {
+          title: "Use Query Parameters for Filtering and Pagination",
+          content:
+            "Support query parameters to filter, sort, and paginate results.",
+          code: "// Example: GET /products?category=books&limit=10&page=2",
+        },
+        {
+          title: "Version Your API",
+          content:
+            "Version your API to avoid breaking changes for existing clients.",
+          code: "// Example: /api/v1/users",
+        },
+        {
+          title: "Secure Your API",
+          content:
+            "Protect your API endpoints with authentication and authorization (e.g., JWT, OAuth).",
+          code: "// Use middleware to check tokens before processing requests.",
+        },
+      ],
+    },
+    {
+      title: "Level 48: Authentication & Authorization with JWT",
+      description:
+        "Learn to implement secure user authentication and control access to your APIs using JWT.",
+      lessons: [
+        {
+          title: "What is Authentication vs Authorization?",
+          content:
+            "Authentication verifies who you are; authorization determines what you can do.",
+          code: "// Example: Login (authentication) vs. Admin access (authorization)",
+        },
+        {
+          title: "What is JWT?",
+          content:
+            "JSON Web Token (JWT) is a compact, URL-safe token format that securely transmits user identity and claims.",
+          code: "// JWT consists of header, payload, and signature encoded as a string.",
+        },
+        {
+          title: "Generating a JWT",
+          content:
+            "After a user logs in, your server creates a JWT and sends it to the client.",
+          code: "const jwt = require('jsonwebtoken');\n\nconst token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });",
+        },
+        {
+          title: "Sending JWT to Client",
+          content:
+            "The client stores the token (e.g., in localStorage) and sends it with API requests in the Authorization header.",
+          code: "// Authorization: Bearer <token>",
+        },
+        {
+          title: "Verifying JWT on Server",
+          content:
+            "Your server verifies the token on each request to protect secure routes.",
+          code: "const token = req.headers.authorization?.split(' ')[1];\n\njwt.verify(token, 'your-secret-key', (err, decoded) => {\n  if (err) return res.status(401).json({ error: 'Unauthorized' });\n  req.userId = decoded.userId;\n  next();\n});",
+        },
+        {
+          title: "Protecting Routes with Middleware",
+          content: "Use middleware to check the token before allowing access.",
+          code: "function authMiddleware(req, res, next) {\n  // verify token here\n  next();\n}\n\napp.get('/protected', authMiddleware, (req, res) => {\n  res.send('Secure Data');\n});",
+        },
+        {
+          title: "Refreshing Tokens",
+          content:
+            "Use refresh tokens to keep users logged in without asking them to re-authenticate frequently.",
+          code: "// Implement refresh token logic to issue new JWTs.",
+        },
+        {
+          title: "Security Best Practices",
+          content:
+            "- Use HTTPS\n- Keep secret keys safe\n- Set short expiration for JWTs\n- Avoid storing tokens in insecure places",
+          code: "// Protect your app and users!",
+        },
+      ],
+    },
+    {
+      title: "Level 49: Testing JavaScript Applications",
+      description:
+        "Learn how to write tests for your JavaScript code to improve reliability and catch bugs early.",
+      lessons: [
+        {
+          title: "Why Test Your Code?",
+          content:
+            "Testing helps you catch bugs early, ensure your code works as expected, and makes refactoring safer.",
+          code: "// Testing improves code quality and confidence.",
+        },
+        {
+          title: "Types of Tests",
+          content:
+            "Common test types include:\n- Unit tests: Test individual functions/components\n- Integration tests: Test interactions between parts\n- End-to-end tests: Test whole workflows",
+          code: "// Unit test example tests a single function.",
+        },
+        {
+          title: "Popular Testing Frameworks",
+          content:
+            "Jest, Mocha, and Jasmine are popular frameworks for testing JavaScript.",
+          code: "npm install --save-dev jest",
+        },
+        {
+          title: "Writing a Simple Unit Test with Jest",
+          content: "Create a test file and write tests using Jest's syntax.",
+          code: `// sum.js\nfunction sum(a, b) {\n  return a + b;\n}\nmodule.exports = sum;\n\n// sum.test.js\nconst sum = require('./sum');\n\ntest('adds 1 + 2 to equal 3', () => {\n  expect(sum(1, 2)).toBe(3);\n});`,
+        },
+        {
+          title: "Running Tests",
+          content: "Run your tests using the command line.",
+          code: "npx jest",
+        },
+        {
+          title: "Testing Asynchronous Code",
+          content: "Use async/await or callbacks to test async functions.",
+          code: `test('fetches data', async () => {\n  const data = await fetchData();\n  expect(data).toBeDefined();\n});`,
+        },
+        {
+          title: "Mocking Functions and Modules",
+          content: "Mock dependencies to isolate the code you’re testing.",
+          code: "// jest.mock('moduleName');",
+        },
+        {
+          title: "Test Coverage",
+          content:
+            "Check how much of your code is covered by tests using coverage reports.",
+          code: "npx jest --coverage",
+        },
+      ],
+    },
+    {
+      title: "Level 50: Deploying JavaScript Applications",
+      description:
+        "Learn how to deploy your JavaScript apps to the web using popular hosting services and best practices.",
+      lessons: [
+        {
+          title: "Why Deploy?",
+          content:
+            "Deployment makes your app accessible to users on the internet.",
+          code: "// Deployment = publishing your app live.",
+        },
+        {
+          title: "Preparing Your App",
+          content:
+            "Build and optimize your app for production (e.g., minify, bundle files).",
+          code: "// For React/Next.js:\nnpm run build",
+        },
+        {
+          title: "Choosing a Hosting Platform",
+          content:
+            "Popular options include:\n- Vercel\n- Netlify\n- Heroku\n- DigitalOcean\n- AWS",
+          code: "// Each has its pros and cons.",
+        },
+        {
+          title: "Deploying a Static Site",
+          content:
+            "For frontend apps (React, Vue, plain JS), you can deploy static files easily.",
+          code: "// Upload build folder to hosting or use CLI tools.",
+        },
+        {
+          title: "Deploying a Node.js Backend",
+          content:
+            "Deploy backend servers using platforms like Heroku or DigitalOcean.",
+          code: "// Push your code and configure environment variables.",
+        },
+        {
+          title: "Using Environment Variables",
+          content:
+            "Keep secrets and configuration separate with environment variables.",
+          code: "// Use .env files and configure on hosting platform.",
+        },
+        {
+          title: "Continuous Deployment",
+          content:
+            "Automate deployments on every git push using CI/CD pipelines.",
+          code: "// Use GitHub Actions, GitLab CI, or platform integrations.",
+        },
+        {
+          title: "Domain and HTTPS",
+          content: "Set up custom domains and secure your site with HTTPS.",
+          code: "// Most platforms provide easy HTTPS via Let's Encrypt.",
+        },
+        {
+          title: "Monitoring and Logs",
+          content:
+            "Monitor your app for errors and performance after deployment.",
+          code: "// Use logging tools and error tracking services.",
         },
       ],
     },
