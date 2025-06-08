@@ -2708,7 +2708,7 @@ export default function JavaScriptLearningApp() {
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-col items-center justify-center px-2 sm:px-4 pt-6 sm:pt-8">
+      <main className="flex flex-col items-center justify-start px-2 sm:px-4 pt-6 sm:pt-8">
         <div className="w-full max-w-6xl overflow-hidden">
           <div
             className="flex transition-transform duration-300 ease-in-out"
@@ -2717,9 +2717,9 @@ export default function JavaScriptLearningApp() {
             {levels.map((level, levelIndex) => (
               <div
                 key={levelIndex}
-                className="w-full flex-shrink-0 px-2 sm:px-4"
+                className="w-full flex-shrink-0 px-2 sm:px-4 flex justify-center"
               >
-                <Card className="bg-gray-800 border-gray-700 shadow-xl">
+                <Card className="bg-gray-800 border-gray-700 shadow-xl w-full max-w-4xl">
                   <CardHeader>
                     <CardTitle className="text-2xl sm:text-3xl text-blue-400 mb-2">
                       {level.title}
@@ -2773,7 +2773,7 @@ export default function JavaScriptLearningApp() {
                               </div>
                             </div>
 
-                            <p className="text-gray-300 text-base leading-relaxed mb-6">
+                            <p className="text-gray-300 text-base leading-relaxed mb-2">
                               {lesson.content}
                             </p>
 
@@ -2796,13 +2796,13 @@ export default function JavaScriptLearningApp() {
                     </div>
 
                     {/* Lesson Nav Buttons */}
-                    <div className="flex justify-between items-center pt-4 gap-2 flex-wrap sm:flex-nowrap">
+                    <div className="flex justify-between items-center mt-2 gap-2 flex-wrap sm:flex-nowrap">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => goToPreviousLesson(levelIndex)}
                         disabled={getCurrentLessonIndex(levelIndex) === 0}
-                        className="bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-300"
+                        className="bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-300 w-full sm:w-auto"
                       >
                         <ChevronLeft className="h-4 w-4 mr-1" />
                         Previous Lesson
@@ -2821,7 +2821,7 @@ export default function JavaScriptLearningApp() {
                           getCurrentLessonIndex(levelIndex) ===
                           level.lessons.length - 1
                         }
-                        className="bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-300"
+                        className="bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-300 w-full sm:w-auto"
                       >
                         Next Lesson
                         <ChevronRight className="h-4 w-4 ml-1" />
@@ -2829,7 +2829,7 @@ export default function JavaScriptLearningApp() {
                     </div>
                   </CardContent>
 
-                  <CardFooter className="flex justify-between items-center">
+                  {/* <CardFooter className="flex justify-between items-center">
                     <div className="text-sm text-gray-400">
                       Level {levelIndex + 1} of {levels.length}
                     </div>
@@ -2845,7 +2845,7 @@ export default function JavaScriptLearningApp() {
                         />
                       ))}
                     </div>
-                  </CardFooter>
+                  </CardFooter> */}
                 </Card>
               </div>
             ))}
@@ -2853,7 +2853,7 @@ export default function JavaScriptLearningApp() {
         </div>
 
         {/* Bottom Level Navigation */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 w-full px-2 sm:px-0 max-w-4xl">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6 w-full px-2 sm:px-0 max-w-4xl">
           <Button
             variant="outline"
             onClick={goToPreviousLevel}
