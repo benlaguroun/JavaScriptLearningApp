@@ -2720,7 +2720,7 @@ export default function JavaScriptLearningApp() {
                 className="w-full flex-shrink-0 px-2 sm:px-4 flex justify-center"
               >
                 <Card className="bg-gray-800 border-gray-700 shadow-xl w-full max-w-4xl">
-                  <CardHeader>
+                  <CardHeader className="pb-4">
                     <CardTitle className="text-2xl sm:text-3xl text-blue-400 mb-2">
                       {level.title}
                     </CardTitle>
@@ -2729,9 +2729,9 @@ export default function JavaScriptLearningApp() {
                     </p>
                   </CardHeader>
 
-                  <CardContent className="space-y-6">
+                  <CardContent className="space-y-4 pb-0">
                     {/* Lesson Dots */}
-                    <div className="flex justify-center gap-2 mb-4">
+                    <div className="flex justify-center gap-2">
                       {level.lessons.map((_, lessonIndex) => (
                         <button
                           key={lessonIndex}
@@ -2760,8 +2760,8 @@ export default function JavaScriptLearningApp() {
                             key={lessonIndex}
                             className="w-full flex-shrink-0 space-y-4"
                           >
-                            <div className="text-center mb-4">
-                              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-2">
+                            <div className="text-center">
+                              <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-1">
                                 {lesson.title}
                               </h3>
                               <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
@@ -2773,7 +2773,7 @@ export default function JavaScriptLearningApp() {
                               </div>
                             </div>
 
-                            <p className="text-gray-300 text-base leading-relaxed mb-2">
+                            <p className="text-gray-300 text-base leading-relaxed">
                               {lesson.content}
                             </p>
 
@@ -2796,7 +2796,7 @@ export default function JavaScriptLearningApp() {
                     </div>
 
                     {/* Lesson Nav Buttons */}
-                    <div className="flex justify-between items-center mt-2 gap-2 flex-wrap sm:flex-nowrap">
+                    <div className="flex justify-between items-center gap-2 flex-wrap sm:flex-nowrap">
                       <Button
                         variant="outline"
                         size="sm"
@@ -2828,24 +2828,6 @@ export default function JavaScriptLearningApp() {
                       </Button>
                     </div>
                   </CardContent>
-
-                  {/* <CardFooter className="flex justify-between items-center">
-                    <div className="text-sm text-gray-400">
-                      Level {levelIndex + 1} of {levels.length}
-                    </div>
-                    <div className="flex gap-1">
-                      {levels.map((_, dotIndex) => (
-                        <div
-                          key={dotIndex}
-                          className={`w-2 h-2 rounded-full ${
-                            dotIndex === currentLevelIndex
-                              ? "bg-purple-400"
-                              : "bg-gray-600"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </CardFooter> */}
                 </Card>
               </div>
             ))}
@@ -2853,7 +2835,7 @@ export default function JavaScriptLearningApp() {
         </div>
 
         {/* Bottom Level Navigation */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6 w-full px-2 sm:px-0 max-w-4xl">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4 w-full px-2 sm:px-0 max-w-4xl">
           <Button
             variant="outline"
             onClick={goToPreviousLevel}
