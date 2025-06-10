@@ -2758,7 +2758,7 @@ export default function JavaScriptLearningApp() {
                         {level.lessons.map((lesson, lessonIndex) => (
                           <div
                             key={lessonIndex}
-                            className="w-full flex-shrink-0 space-y-4"
+                            className="w-full flex-shrink-0 space-y-2"
                           >
                             <div className="text-center">
                               <h3 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-1">
